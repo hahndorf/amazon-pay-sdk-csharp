@@ -1,10 +1,12 @@
 # Amazon Pay SDK (C#)
 Amazon Pay API Integration
 
+This is a rough port of the API to .NET Core 2.x, use with care, unsupported.
+
 ## Requirements
 
 * Amazon Pay account - [Register here](https://pay.amazon.com/signup)
-* .NET 2.0 or higher
+* .NET Standard 2.0 or higher (.NET Core 2.x)
 * Newtonsoft.json (JSON.NET)
 
 ## Documentation
