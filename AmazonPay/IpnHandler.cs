@@ -1,21 +1,17 @@
-﻿using System;
+﻿using AmazonPay.Responses;
+using Common.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Text;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using AmazonPay;
-using System.Xml;
-using AmazonPay.Responses;
+using System.Text;
 using System.Text.RegularExpressions;
-using Common.Logging;
+using System.Xml;
 
 namespace AmazonPay
 {
@@ -96,9 +92,9 @@ namespace AmazonPay
                     GetIpnResponseObjects();
                 }
             }
-            catch (HttpParseException ex)
+            catch (System.Exception ex)
             {
-                throw new HttpParseException("Error Parsing the IPN notification", ex);
+                throw new System.Exception("Error Parsing the IPN notification", ex);
             }
 
         }
@@ -503,20 +499,21 @@ namespace AmazonPay
         /// <returns>Instance of the x508 certificate</returns>
         private X509Certificate2 GetCertificate(string certPath)
         {
+            // TODO: cache the cert somehow.
             X509Certificate2 cert = null;
-            try
-            {
-                cert = (X509Certificate2)HttpRuntime.Cache.Get(String.Format(Constants.CacheKey, certPath));
-            }
-            catch (HttpException ex)
-            {
-                throw new HttpException("Error requesting certificate", ex);
-            }
+            //try
+            //{
+            //    cert = (X509Certificate2)System.Web.HttpRuntime.Cache.Get(String.Format(Constants.CacheKey, certPath));
+            //}
+            //catch (System.Web.HttpException ex)
+            //{
+            //    throw new System.Web.HttpException("Error requesting certificate", ex);
+            //}
 
             if (cert == null)
             {
                 cert = GetCertificateFromURI(certPath);
-                HttpRuntime.Cache.Insert(String.Format(Constants.CacheKey, certPath), cert, null, DateTime.UtcNow.AddDays(1.0), System.Web.Caching.Cache.NoSlidingExpiration);
+               // System.Web.HttpRuntime.Cache.Insert(String.Format(Constants.CacheKey, certPath), cert, null, DateTime.UtcNow.AddDays(1.0), System.Web.Caching.Cache.NoSlidingExpiration);
             }
 
             return cert;
